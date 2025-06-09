@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner"
 
-const inter = Inter({ subsets  : ["latin"]});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,37 +17,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-   
-   <ClerkProvider 
-     appearance={{
-      elements: {
-        userButtonPopoverActionButtonText: "text-white",
-        userButtonPopoverActionButton: "hover:bg-gray-700",
-      },
-       layout: {
-          logoImageUrl: '/icons/yoom-logo.svg',
-          socialButtonsVariant: 'iconButton'
-       },
-      variables: {
-        colorText: "#fff",
-        colorPrimary: "#0E78F9",
-        colorBackground: "#1C1F2E",
-        colorInputBackground: "#252A41",
-        colorInputText: "#fff",
-      }
-     }}
-   >
-    
-    
     <html lang="en">
-      <body
-        className={`${inter.className} bg-dark-2`}>
-      
-        {children}
+      <body className={`${inter.className} bg-dark-2`}>
+        <ClerkProvider
+          appearance={{
+            elements: {
+              userButtonPopoverActionButtonText: "text-white",
+              userButtonPopoverActionButton: "hover:bg-gray-700",
+            },
+            layout: {
+              logoImageUrl: "/icons/yoom-logo.svg",
+              socialButtonsVariant: "iconButton",
+            },
+            variables: {
+              colorText: "#fff",
+              colorPrimary: "#0E78F9",
+              colorBackground: "#1C1F2E",
+              colorInputBackground: "#252A41",
+              colorInputText: "#fff",
+            },
+          }}
+        >
+          {children}
+          <Toaster />
+        </ClerkProvider>
+        
       </body>
     </html>
-    
-   </ClerkProvider>
-   
   );
 }
