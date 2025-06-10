@@ -2,7 +2,7 @@
 import { tokenProvider } from "@/actions/stream.action";
 import Loader from "@/components/Loader";
 import { useUser } from "@clerk/nextjs";
-import { StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk";
+import { StreamCall, StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk";
 
 import { ReactNode, useEffect, useState } from "react";
 
@@ -35,7 +35,10 @@ const StreamVideoProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return <StreamVideo client={videoClient}>
+    
     {children}
+     
+   
   </StreamVideo>;
 };
 
