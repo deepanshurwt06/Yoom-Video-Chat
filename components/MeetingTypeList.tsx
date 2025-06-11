@@ -7,6 +7,11 @@ import MeetingModel from "./MeetingModel";
 import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { toast } from "sonner"
+import { Textarea } from "./ui/textarea";
+import ReactDatePicker from "react-datepicker";
+
+
+
 
 
 const MeetingTypeList = () => {
@@ -60,6 +65,9 @@ const MeetingTypeList = () => {
       toast("Failed to create meeting");
     }
   };
+   
+  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetails?.id}`;
+
 
   return (
     <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -92,6 +100,58 @@ const MeetingTypeList = () => {
         className="bg-[#F9A90E]"
       />
 
+      {!callDetails ? (
+        <MeetingModel
+        isOpen={meetingState === "isScheduledMeeting"}
+        onClose={() => setMeetingState(undefined)}
+        title="Create Meeting"
+        handleClick={createMeeting}
+        > 
+        <div className="flex flex-col gap-2.5 ">
+          <label className="text-base text-normal leading-[22px] text-[#ECF0FF] ">Add a description</label>
+
+          <Textarea className="border-none bg-[#2f344e] focus-visible:ring-0 focus-visible:ring-offset-0" 
+          onChange={(e) => {
+            setValues({...values, description: e.target.value})
+          }} />
+
+        
+
+        </div>
+        
+        <div className="flex w-full flex-col gap-2.5">
+        <label className="text-base text-normal leading-[22px] text-[#ECF0FF] ">Select Date and Time</label>
+          <ReactDatePicker 
+           selected={values.dateTime}
+           onChange={(date) => setValues({...values, dateTime : date!})}
+           showTimeSelect
+           timeFormat="HH:mm"
+           timeIntervals={15}
+           timeCaption="time"
+           dateFormat="MMMM d, yyyy h:mm aa"
+           className="w-full rounded bg-[#2f344e] p-2 focus:outline-none"
+          />
+
+        </div>
+
+        </MeetingModel>
+      ) : (
+        <MeetingModel
+        isOpen={meetingState === "isScheduledMeeting"}
+        onClose={() => setMeetingState(undefined)}
+        title="Meeting Created"
+        className="text-center"
+       
+        handleClick={ () => {
+          navigator.clipboard.writeText(meetingLink);
+          toast("Meeting link copied to clipboard");        
+        }}
+        image="/icons/checked.svg"
+        buttonIcon="/icons/copy.svg"
+        buttonText="Copy Meeting Link"
+        />
+      )}
+
       <MeetingModel
         isOpen={meetingState === "isInstantMeeting"}
         onClose={() => setMeetingState(undefined)}
@@ -99,7 +159,7 @@ const MeetingTypeList = () => {
         className="text-center"
         buttonText="Start Meeting"
         handleClick={createMeeting}
-      />
+        />
     </section>
   );
 };
